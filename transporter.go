@@ -10,7 +10,7 @@ import (
 )
 
 type User struct {
-	UserName string
+	Username string
 	Password string
 }
 
@@ -25,15 +25,14 @@ func (c *Client) SetBaseURL(url string) *Client {
 }
 
 func (c *Client) SetBasicAuth(username, password string) *Client {
-	c.UserInfo.UserName = username
-	c.UserInfo.Password = password
+	c.UserInfo = &User{Username: username, Password: password}
 	return c
 }
 
 func (c *Client) SendHttpRequest(httpMethod string, requestURL string) (*http.Response) {
 
 	//validate the authentication credentials
-	if c.UserInfo.UserName == "" || c.UserInfo.Password == "" {
+	if c.UserInfo.Username == "" || c.UserInfo.Password == "" {
 		Error.Print("Invalid Credentials")
 		os.Exit(1)
 
@@ -59,7 +58,7 @@ func (c *Client) SendHttpRequest(httpMethod string, requestURL string) (*http.Re
 
 	// set http request headers
 	req.Header.Add("Content-Type", "application/json")
-	req.SetBasicAuth(c.UserInfo.UserName, c.UserInfo.Password)
+	req.SetBasicAuth(c.UserInfo.Username, c.UserInfo.Password)
 
 	resp, err := client.Do(req)
 	if err != nil {
