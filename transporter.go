@@ -5,13 +5,35 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
-func SendHttpRequest(httpMethod string, auth *Auth, requestURL string) (*http.Response, string) {
+type User struct {
+	UserName string
+	Password string
+}
+
+type Client struct {
+	UserInfo *User
+	BaseURL  string
+}
+
+func (c *Client) SetBaseURL(url string) *Client {
+	c.BaseURL = strings.TrimRight(url, "/")
+	return c
+}
+
+func (c *Client) SetBasicAuth(username, password string) *Client {
+	c.UserInfo.UserName = username
+	c.UserInfo.Password = password
+	return c
+}
+
+func (c *Client) SendHttpRequest(httpMethod string, requestURL string) (*http.Response) {
 
 	//validate the authentication credentials
-	if auth.UserName == "" || auth.Password == "" {
+	if c.UserInfo.UserName == "" || c.UserInfo.Password == "" {
 		Error.Print("Invalid Credentials")
 		os.Exit(1)
 
@@ -37,21 +59,22 @@ func SendHttpRequest(httpMethod string, auth *Auth, requestURL string) (*http.Re
 
 	// set http request headers
 	req.Header.Add("Content-Type", "application/json")
-	req.SetBasicAuth(auth.UserName, auth.Password)
+	req.SetBasicAuth(c.UserInfo.UserName, c.UserInfo.Password)
 
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatal(err)
 	}
+	// return http response
+	return resp
+}
 
+func PrintResponseBody(resp *http.Response){
 	defer resp.Body.Close()
 	bodyText, err := io.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatal(err)
 	}
 	s := string(bodyText)
-
-	// return http response and response body as text
-	return resp, s
-
+	Info.Print(s)
 }
