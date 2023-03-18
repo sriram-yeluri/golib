@@ -26,4 +26,5 @@ resp := c.SendHttpRequest("GET", "https://example.com")
 
 ### General purpose utility functions 
 
-> Print response body golib.PrintResponseBody(resp *http.Response)
+> Print response body `golib.PrintResponseBody(resp *http.Response)`
+
