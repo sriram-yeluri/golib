@@ -12,7 +12,7 @@ import "github.com/sriram-yeluri/golib"
 ```go
 golib.Info.Print(" This is logged as Info")
 golib.Warn.Print(" This is logged as Warning")
-golib.Info.Error(" This is logged as Error")
+golib.Error.Print(" This is logged as Error")
 ```
 
 ### How to make a http request
