@@ -29,7 +29,7 @@ func (c *Client) SetBasicAuth(username, password string) *Client {
 	return c
 }
 
-func (c *Client) SendHttpRequest(httpMethod string, requestURL string) (*http.Response) {
+func (c *Client) SendHttpRequest(httpMethod string, requestURL string) *http.Response {
 
 	//validate the authentication credentials
 	if c.UserInfo.Username == "" || c.UserInfo.Password == "" {
@@ -68,7 +68,7 @@ func (c *Client) SendHttpRequest(httpMethod string, requestURL string) (*http.Re
 	return resp
 }
 
-func PrintResponseBody(resp *http.Response){
+func PrintResponseBody(resp *http.Response) {
 	defer resp.Body.Close()
 	bodyText, err := io.ReadAll(resp.Body)
 	if err != nil {
