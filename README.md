@@ -21,10 +21,14 @@ golib.Error.Print(" This is logged as Error")
 c := new(golib.Client)
 c.SetBaseURL("https://example.com")
 c.SetBasicAuth("username", "password")
-resp := c.SendHttpRequest("GET", "https://example.com")
+resp := c.SendHttpRequest("GET", "/api/v1/endpoint")
 ```
 
 ### General purpose utility functions 
 
-> Print response body `golib.PrintResponseBody(resp *http.Response)`
+Print response body : `golib.PrintHttpResponseBody(resp)(resp *http.Response)`  
+Write HttpResponse to a given file name : `golib.WriteHttpResponseToFile(resp, "resp.txt")`  
+Read from a given file and return []byte data : `data := golib.ReadFromFile("resp.txt")`  
+
+
 
