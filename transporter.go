@@ -1,7 +1,7 @@
 package golib
 
 import (
-	"io"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -29,14 +29,24 @@ func (c *Client) SetBasicAuth(username, password string) *Client {
 	return c
 }
 
-func (c *Client) SendHttpRequest(httpMethod string, requestURL string) *http.Response {
+func (c *Client) SendHttpRequest(httpMethod string, api string) *http.Response {
 
 	//validate the authentication credentials
 	if c.UserInfo.Username == "" || c.UserInfo.Password == "" {
-		Error.Print("Invalid Credentials")
+		Error.Print("Missing Credentials")
 		os.Exit(1)
-
 	}
+
+	//form the restEndPoint url
+	if c.BaseURL == "" {
+		Error.Print("Missing BaseURL")
+		os.Exit(1)
+	}
+	restEndPoint := fmt.Sprintf("%s/%s", c.BaseURL, api)
+	if api == "" {
+		restEndPoint = strings.TrimRight(restEndPoint, "/")
+	}
+
 	// For control over proxies, TLS configuration, keep-alives,
 	// compression, and other settings, create a Transport:
 	tr := &http.Transport{
@@ -51,7 +61,7 @@ func (c *Client) SendHttpRequest(httpMethod string, requestURL string) *http.Res
 		Timeout:   30 * time.Second,
 	}
 	// Create http request
-	req, err := http.NewRequest(httpMethod, requestURL, nil)
+	req, err := http.NewRequest(httpMethod, restEndPoint, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -66,14 +76,4 @@ func (c *Client) SendHttpRequest(httpMethod string, requestURL string) *http.Res
 	}
 	// return http response
 	return resp
-}
-
-func PrintResponseBody(resp *http.Response) {
-	defer resp.Body.Close()
-	bodyText, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-	s := string(bodyText)
-	Info.Print(s)
 }
