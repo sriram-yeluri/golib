@@ -2,7 +2,6 @@ package golib
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -29,7 +28,7 @@ func (c *Client) SetBasicAuth(username, password string) *Client {
 	return c
 }
 
-func (c *Client) SendHttpRequest(httpMethod string, api string) *http.Response {
+func (c *Client) SendHttpRequest(httpMethod string, api string) (*http.Response, error) {
 
 	//validate the authentication credentials
 	if c.UserInfo.Username == "" || c.UserInfo.Password == "" {
@@ -63,7 +62,7 @@ func (c *Client) SendHttpRequest(httpMethod string, api string) *http.Response {
 	// Create http request
 	req, err := http.NewRequest(httpMethod, restEndPoint, nil)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	// set http request headers
@@ -72,8 +71,8 @@ func (c *Client) SendHttpRequest(httpMethod string, api string) *http.Response {
 
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	// return http response
-	return resp
+	return resp, nil
 }
