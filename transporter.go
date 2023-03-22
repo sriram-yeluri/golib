@@ -1,9 +1,9 @@
 package golib
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 )
@@ -33,13 +33,15 @@ func (c *Client) SendHttpRequest(httpMethod string, api string) (*http.Response,
 	//validate the authentication credentials
 	if c.UserInfo.Username == "" || c.UserInfo.Password == "" {
 		Error.Print("Missing Credentials")
-		os.Exit(1)
+		err := errors.New("missing credentials")
+		return nil, err
 	}
 
 	//form the restEndPoint url
 	if c.BaseURL == "" {
 		Error.Print("Missing BaseURL")
-		os.Exit(1)
+		err := errors.New("missing BaseUrl ... ")
+		return nil, err
 	}
 	restEndPoint := fmt.Sprintf("%s/%s", c.BaseURL, api)
 	if api == "" {
