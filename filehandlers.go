@@ -2,12 +2,14 @@ package golib
 
 import (
 	"bufio"
+	"encoding/json"
 	"io"
 	"log"
 	"net/http"
 	"os"
 )
 
+// WriteHttpResponseToFile function saves http response body to a given file name.
 func WriteHttpResponseToFile(resp *http.Response, filename string) error {
 	defer resp.Body.Close()
 	file, err := os.Create(filename)
@@ -25,6 +27,8 @@ func WriteHttpResponseToFile(resp *http.Response, filename string) error {
 	return nil
 }
 
+// ReadFromFile function reads data from file and returns []byte stream.
+// This function reads file line by line.
 func ReadFromFile(filename string) ([]byte, error) {
 	// data , err := os.ReadFile(filename)
 	// if err != nil{
@@ -56,4 +60,18 @@ func ReadFromFile(filename string) ([]byte, error) {
 	log.Printf("Read %d bytes from file", bytes)
 
 	return data, nil
+}
+
+// WriteStructToJsonFile method writes strucure data to a file in json format.
+func WriteStructToJsonFile(data []byte, filename string) error {
+	file, err := json.MarshalIndent(data, "", " ")
+	if err != nil {
+		return err
+	}
+	err = os.WriteFile(filename, file, 0644)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
