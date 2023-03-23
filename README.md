@@ -7,7 +7,17 @@ customized golang library for productivity improvement
 import "github.com/sriram-yeluri/golib"
 ```
 
-### How to print log messages
+## Features
+* Simple httpRequest function
+* Print logs effectively for better tracebility
+* Filehandlers to 
+    * `Save http response to a file` 
+    * `print http response to console`
+    * `read from a json file`
+    * `Write structure data to json file` 
+
+## Usage
+### Print log messages
 
 ```go
 golib.Info.Print(" This is logged as Info")
@@ -24,11 +34,13 @@ c.SetBasicAuth("username", "password")
 resp := c.SendHttpRequest("GET", "/api/v1/endpoint")
 ```
 
-### General purpose utility functions 
+### FileHandlers
 
 Print response body : `golib.PrintHttpResponseBody(resp)(resp *http.Response)`  
 Write HttpResponse to a given file name : `golib.WriteHttpResponseToFile(resp, "resp.txt")`  
-Read from a given file and return []byte data : `data := golib.ReadFromFile("resp.txt")`  
+Read from a given file and return []byte data : `data := golib.ReadFromFile("resp.txt")` 
+Write structure data to a json file : `WriteStructToJsonFile([]struct, "filename.json"`  
+
 
 
 
