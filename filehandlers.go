@@ -30,10 +30,6 @@ func WriteHttpResponseToFile(resp *http.Response, filename string) error {
 // ReadFromFile function reads data from file and returns []byte stream.
 // This function reads file line by line.
 func ReadFromFile(filename string) ([]byte, error) {
-	// data , err := os.ReadFile(filename)
-	// if err != nil{
-	// 	log.Fatal(err)
-	// }
 	//open the file
 	file, err := os.Open(filename)
 	if err != nil {
@@ -52,13 +48,11 @@ func ReadFromFile(filename string) ([]byte, error) {
 	//create byte array to store the file contents
 	data := make([]byte, stat.Size())
 	//read the file
-	bytes, err := file.Read(data)
+	_, err = file.Read(data)
 	if err != nil {
 		Error.Println("Cannot read the file:", err)
 		return nil, err
 	}
-	log.Printf("Read %d bytes from file", bytes)
-
 	return data, nil
 }
 
