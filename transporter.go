@@ -75,6 +75,7 @@ func (c *Client) SendHttpRequest(httpMethod string, api string) (*http.Response,
 	if err != nil {
 		return nil, err
 	}
+	defer resp.Body.Close()
 	// return http response
 	return resp, nil
 }
